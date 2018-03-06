@@ -3,7 +3,7 @@
   "plugins": [
     [
       "transform-react-jsx",
-      { "pragma": "element" },
+      { "pragma": "virtualDOMElement" },
     ],
   ]
 }

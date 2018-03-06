@@ -1,12 +1,12 @@
-const element = (type, props, ...children) => ({
+const virtualDOMElement = (type, props, ...children) => ({
   type,
   props: props || {},
-  children
+  children,
 });
 
 const setClassNameProp = ($target, value) => {
   $target.setAttribute('class', value);
-}
+};
 
 const setBooleanProp = ($target, name, value) => {
   if (value) {
@@ -15,7 +15,7 @@ const setBooleanProp = ($target, name, value) => {
   } else {
     $target[name] = false;
   }
-}
+};
 
 const isEventProp = name => /^on/.test(name);
 
@@ -31,15 +31,15 @@ const addEventListeners = ($target, props) => {
     if (isEventProp(name)) {
       $target.addEventListener(
         extractEventType(name),
-        props[name]
+        props[name],
       );
     }
   });
-}
+};
 
 const setProp = ($target, name, value) => {
   if (isCustomProp(name)) {
-    return;
+    return null;
   } else if (name === 'className') {
     setClassNameProp($target, value);
   } else if (typeof value === 'boolean') {
@@ -47,26 +47,27 @@ const setProp = ($target, name, value) => {
   } else {
     $target.setAttribute(name, value);
   }
-}
+  return null;
+};
 
 const setProps = ($target, props) => {
   Object.keys(props).forEach((name) => {
     setProp($target, name, props[name]);
   });
-}
+};
 
 const removeClassNameProp = ($target) => {
   $target.removeAttribute('class');
-}
+};
 
 const removeBooleanProp = ($target, name) => {
   $target.removeAttribute(name);
   $target[name] = false;
-}
+};
 
 const removeProp = ($target, name, value) => {
   if (isCustomProp(name)) {
-    return;
+    return null;
   } else if (name === 'className') {
     removeClassNameProp($target);
   } else if (typeof value === 'boolean') {
@@ -74,7 +75,8 @@ const removeProp = ($target, name, value) => {
   } else {
     $target.removeAttribute(name);
   }
-}
+  return null;
+};
 
 const updateProp = ($target, name, newValue, oldValue) => {
   if (!newValue) {
@@ -82,18 +84,18 @@ const updateProp = ($target, name, newValue, oldValue) => {
   } else if (!oldValue || newValue !== oldValue) {
     setProp($target, name, newValue);
   }
-}
+};
 
 const updateProps = ($target, newProps, oldProps = {}) => {
   const props = Object.assign({}, oldProps, newProps);
   Object.keys(props).forEach((name) => {
     updateProp($target, name, newProps[name], oldProps[name]);
   });
-}
+};
 
 const createElement = (node) => {
-  if (typeof node === 'string') return document.createTextNode(node);
-  const $element = document.createElement(node.type);
+  if (typeof node === 'string') return global.document.createTextNode(node);
+  const $element = global.document.createElement(node.type);
   setProps($element, node.props);
   addEventListeners($element, node.props);
   node.children
@@ -102,9 +104,9 @@ const createElement = (node) => {
   return $element;
 };
 
-const hasChanged = (node1, node2)  => (
+const hasChanged = (node1, node2) => (
   typeof node1 !== typeof node2 ||
-  typeof node1 === 'string' && node1 !== node2 ||
+  (typeof node1 === 'string' && node1 !== node2) ||
   node1.type !== node2.type ||
   (node1.props && node1.props.forceUpdate)
 );
@@ -125,16 +127,17 @@ const updateElement = ($parent, newNode, oldNode, index = 0) => {
         $parent.childNodes[index],
         newNode.children[i],
         oldNode.children[i],
-        i
+        i,
       );
     }
   }
-}
+};
 
-const render = (node, $target) => updateElement($target, node)
+const render = (node, $target) => updateElement($target, node);
+
+global.virtualDOMElement = virtualDOMElement;
 
 module.exports = {
   render,
   updateElement,
-  element,
 };

@@ -1,22 +1,23 @@
-const { updateElement, render, element } = require('../src/virtual-dom');
+const { updateElement, render } = require('../src/virtual-dom');
 
-const log = e  => console.log(e.target.value);
-
-const $root = document.getElementById('root');
+const $root = global.document.getElementById('root');
 
 const f = (
   <div>
     <button
       id="update"
       onClick={() => updateElement($root, g, f)}
-    >Update</button>
+    >Update
+    </button>
     <ul style="list-style: none;">
-      <li className="item" onClick={() => alert('hi!')}>item 1</li>
-      <li className="item">
-        <input type="checkbox" checked={true} />
-        <input type="text" onInput={(e) => log(e)} />
+      <li className="item" onClick={() => alert('hi!')}>
+        item 1
       </li>
-      <li forceUpdate={true}>text</li>
+      <li className="item">
+        <input type="checkbox" checked />
+        <input type="text" onInput={log} />
+      </li>
+      <li forceUpdate>text</li>
     </ul>
   </div>
 );
@@ -26,17 +27,20 @@ const g = (
     <button
       id="update"
       onClick={() => updateElement($root, g, f)}
-    >Update</button>
+    >Update
+    </button>
     <ul style="list-style: none;">
-      <li className="item item2" onClick={() => alert('hi!')}>item 1</li>
+      <li className="item item2" onClick={() => alert('hi!')}>
+        item 1
+      </li>
       <li style="background: red;">
         <input type="checkbox" checked={false} />
-        <input type="text" onInput={(e) => log(e)} />
+        <input type="text" onInput={log} />
       </li>
-      <li forceUpdate={true}>text</li>
+      <li forceUpdate>text</li>
     </ul>
   </div>
 );
 
 
-render(f, $root)
+render(f, $root);

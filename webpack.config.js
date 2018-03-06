@@ -21,14 +21,14 @@ module.exports = {
             ],
             plugins: [
               [
-                "transform-react-jsx",
-                { "pragma": "element" },
+                'transform-react-jsx',
+                { pragma: 'virtualDOMElement' },
               ],
             ],
           },
         },
       },
-    ]
+    ],
   },
   resolve: {
     extensions: ['.js', '.jsx'],
