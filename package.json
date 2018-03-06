@@ -1,0 +1,15 @@
+{
+  "name": "virtual-dom",
+  "version": "1.0.0",
+  "description": "Virtual DOM",
+  "main": "virtualDOM.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michael Harrison",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1"
+  }
+}
